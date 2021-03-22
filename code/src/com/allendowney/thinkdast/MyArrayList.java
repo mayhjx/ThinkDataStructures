@@ -12,8 +12,8 @@ import java.util.ListIterator;
  *
  */
 public class MyArrayList<T> implements List<T> {
-	int size;                    // keeps track of the number of elements
-	private T[] array;           // stores the elements
+	int size; // keeps track of the number of elements
+	private T[] array; // stores the elements
 
 	/**
 	 *
@@ -21,7 +21,7 @@ public class MyArrayList<T> implements List<T> {
 	@SuppressWarnings("unchecked")
 	public MyArrayList() {
 		// You can't instantiate an array of T[], but you can instantiate an
-		// array of Object and then typecast it.  Details at
+		// array of Object and then typecast it. Details at
 		// http://www.ibm.com/developerworks/java/library/j-jtp01255/index.html
 		array = (T[]) new Object[10];
 		size = 0;
@@ -44,30 +44,39 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public boolean add(T element) {
-		// TODO: FILL THIS IN!
-		return false;
+		if (size >= array.length) {
+			// make a biiger array and copy over the elements
+			T[] bigger = (T[]) new Object[array.length * 2];
+			System.arraycopy(array, 0, bigger, 0, array.length);
+			array = bigger;
+		}
+		array[size] = element;
+		size++;
+		return true;
 	}
 
 	@Override
 	public void add(int index, T element) {
+		// Inserts the specified element at the specified position in this list
+		// (optional operation). Shifts the element currently at that position (if any)
+		// and any subsequent elements to the right (adds one to their indices).
 		if (index < 0 || index > size) {
 			throw new IndexOutOfBoundsException();
 		}
-		// add the element to get the resizing
+
 		add(element);
 
-		// shift the elements
-		for (int i=size-1; i>index; i--) {
-			array[i] = array[i-1];
+		for (int i = size - 1; i > index; i--) {
+			array[i] = array[i - 1];
 		}
-		// put the new one in the right place
+
 		array[index] = element;
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> collection) {
 		boolean flag = true;
-		for (T element: collection) {
+		for (T element : collection) {
 			flag &= add(element);
 		}
 		return flag;
@@ -92,7 +101,7 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public boolean containsAll(Collection<?> collection) {
-		for (Object element: collection) {
+		for (Object element : collection) {
 			if (!contains(element)) {
 				return false;
 			}
@@ -110,11 +119,23 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public int indexOf(Object target) {
-		// TODO: FILL THIS IN!
+		// Returns the index of the first occurrence of the specified element in this
+		// list, or -1 if this list does not contain the element. More formally, returns
+		// the lowest index i such that (o==null ? get(i)==null : o.equals(get(i))), or
+		// -1 if there is no such index.
+		// Returns:
+		// the index of the first occurrence of the specified element in this list, or
+		// -1 if this list does not contain the element
+		for (int i = 0; i < size; i++) {
+			if (equals(target, array[i])) {
+				return i;
+			}
+		}
 		return -1;
 	}
 
-	/** Checks whether an element of the array is the target.
+	/**
+	 * Checks whether an element of the array is the target.
 	 *
 	 * Handles the special case that the target is null.
 	 *
@@ -145,7 +166,7 @@ public class MyArrayList<T> implements List<T> {
 	@Override
 	public int lastIndexOf(Object target) {
 		// see notes on indexOf
-		for (int i = size-1; i>=0; i--) {
+		for (int i = size - 1; i >= 0; i--) {
 			if (equals(target, array[i])) {
 				return i;
 			}
@@ -181,14 +202,24 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public T remove(int index) {
-		// TODO: FILL THIS IN!
-		return null;
+		// Removes the element at the specified position in this list (optional
+		// operation). Shifts any subsequent elements to the left (subtracts one from
+		// their indices). Returns the element that was removed from the list.
+		// Returns: the element previously at the specified position
+		T old = get(index);
+
+		for (int i = index; i < size - 1; i++) {
+			array[i] = array[i + 1];
+		}
+		size--;
+
+		return old;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> collection) {
 		boolean flag = true;
-		for (Object obj: collection) {
+		for (Object obj : collection) {
 			flag &= remove(obj);
 		}
 		return flag;
@@ -201,8 +232,12 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: FILL THIS IN!
-		return null;
+		// Replaces the element at the specified position in this list with the
+		// specified element (optional operation).
+		// Returns: the element previously at the specified position
+		T oldValue = get(index);
+		array[index] = element;
+		return oldValue;
 	}
 
 	@Override
