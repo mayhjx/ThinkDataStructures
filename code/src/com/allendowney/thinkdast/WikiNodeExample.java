@@ -18,7 +18,8 @@ import org.jsoup.select.Elements;
 public class WikiNodeExample {
 	
 	public static void main(String[] args) throws IOException {
-		String url = "https://en.wikipedia.org/wiki/Java_(programming_language)";
+		// String url = "https://en.wikipedia.org/wiki/Java_(programming_language)";
+		String url = "https://www.wiki-wiki.top/wiki/Java";
 		
 		// download and parse the document
 		Connection conn = Jsoup.connect(url);
